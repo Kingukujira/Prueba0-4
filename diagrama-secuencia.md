@@ -1,11 +1,33 @@
-graph TD;
-    A[Usuario escribe una nota y hace clic en "Save"] --> B[El navegador captura el evento de clic];
-    B --> C[El navegador envía una solicitud HTTP POST al servidor con la nueva nota];
-    C --> D[El servidor recibe la solicitud y guarda la nota];
-    D --> E[El servidor responde con una redirección a /exampleapp/notes];
-    E --> F[El navegador sigue la redirección y solicita la página de notas];
-    F --> G[El servidor responde con el HTML de la página de notas];
-    G --> H[El navegador carga el HTML y solicita los recursos adicionales (CSS, JavaScript)];
-    H --> I[El navegador ejecuta el JavaScript y solicita los datos JSON de las notas];
-    I --> J[El servidor responde con los datos JSON];
-    J --> K[El navegador procesa los datos JSON y actualiza el DOM para mostrar las notas, incluida la nueva nota];
+# Diagrama de Secuencia para Crear una Nueva Nota
+
+```mermaid
+sequenceDiagram
+    participant user as Usuario
+    participant browser as Navegador
+    participant server as Servidor
+
+    Note over user, browser: Usuario escribe una nota y hace clic en "Save"
+
+    user->>browser: Click en "Save"
+    browser->>server: HTTP POST /exampleapp/new_note con contenido de la nota
+    server-->>browser: Respuesta HTTP (Redirección)
+
+    Note over browser: El navegador redirige a /exampleapp/notes
+
+    browser->>server: HTTP GET /exampleapp/notes
+    server-->>browser: HTML de la página de notas
+
+    Note over browser: El navegador carga el HTML y solicita los recursos adicionales (CSS, JavaScript)
+
+    browser->>server: HTTP GET /exampleapp/main.css
+    server-->>browser: main.css
+
+    browser->>server: HTTP GET /exampleapp/main.js
+    server-->>browser: main.js
+
+    Note over browser: El navegador ejecuta main.js
+
+    browser->>server: HTTP GET /exampleapp/data.json
+    server-->>browser: data.json
+
+    Note over browser: El navegador procesa data.json y actualiza el DOM para mostrar las notas, incluida la nueva nota
